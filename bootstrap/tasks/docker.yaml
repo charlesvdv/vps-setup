@@ -1,0 +1,27 @@
+---
+- name: add docker signing key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- shell: lsb_release -cs
+  register: os_release
+
+- name: add docker apt repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ os_release.stdout }} stable"
+    state: present
+  notify: apt update
+
+- name: install docker & docker-compose
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-compose
+
+- name: enable docker service
+  service: name=docker enabled=yes state=started

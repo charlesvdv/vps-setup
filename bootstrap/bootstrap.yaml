@@ -1,0 +1,12 @@
+---
+- hosts: vps
+  become: yes
+  become_user: root
+  become_method: sudo
+  vars_files:
+    - vars.yaml
+  tasks:
+    - import_tasks: tasks/security.yaml
+    - import_tasks: tasks/docker.yaml
+  handlers:
+    - include: handlers/main.yaml
