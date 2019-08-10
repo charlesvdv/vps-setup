@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:alpine
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - db-tiers
+
+  nextcloud:
+    image: nextcloud:fpm-alpine
+    restart: unless-stopped
+    volumes:
+      - nextcloud:/var/www/html
+    networks:
+      - proxy-tiers
+      - db-tiers
+    depends_on:
+      - db
+      - proxy
+
+  proxy:
+    image: abiosoft/caddy:php-no-stats
+    build:
+      # Required because docker-compose clone from github doesn't work
+      # See https://github.com/docker/compose/issues/2856 for more info
+      context: proxy/caddy-docker/php
+      dockerfile: Dockerfile-no-stats
+      args:
+        PUID: 82
+        PGID: 82
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./proxy/Caddyfile:/etc/Caddyfile:ro
+      - nextcloud:/var/www/html
+      - certs:/root/.caddy
+    networks:
+      - proxy-tiers
+
+volumes:
+  nextcloud:
+  certs:
+  db:
+
+networks:
+  proxy-tiers:
+  db-tiers:

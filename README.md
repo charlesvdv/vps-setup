@@ -22,3 +22,18 @@ ansible-playbook -i hosts bootstrap.yaml --ask-become-pass
 ```
 
 *Don't forget to update the hosts file if you want use this command*
+
+## Services
+
+My personal VPS is setup to run everything as container using docker and docker-compose.
+Currently, those services are configured:
+
+- Nextcloud for file backup
+
+In the `services/` folder, run:
+
+```sh
+sudo docker-compose up --build
+```
+
+in order to launch everything.
