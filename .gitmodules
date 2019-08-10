@@ -1,3 +1,3 @@
 [submodule "services/proxy/caddy-docker"]
 	path = services/proxy/caddy-docker
-	url = git@github.com:charlesvdv/caddy-docker.git
+	url = https://github.com/charlesvdv/caddy-docker
