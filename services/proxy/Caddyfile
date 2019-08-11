@@ -1,13 +1,13 @@
-vandevoorde.me
-
-tls charles@vandevoorde.me
+:443 {
+    tls charles@vandevoorde.me
+}
 
 cloud.vandevoorde.me {
     # The configuration is taken from https://github.com/caddyserver/examples/tree/master/nextcloud
     # Commit hash: d1d15e2 (13 March 2019)
     root /var/www/html
-    log /var/log/nextcloud_access.log
-    errors /var/log/nextcloud_errors.log
+    # log /var/log/nextcloud_access.log
+    # errors /var/log/nextcloud_errors.log
 
     gzip
 
