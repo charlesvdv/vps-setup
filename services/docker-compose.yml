@@ -11,17 +11,30 @@ services:
     networks:
       - db-tiers
 
-  nextcloud:
-    image: nextcloud:fpm-alpine
+  b2-gateway:
+    image: minio/minio
     restart: unless-stopped
+    command: minio gateway b2
+    env_file:
+      - ./minio/secret.env
+    networks:
+      - b2-gateway-tiers
+
+  nextcloud:
+    build: ./nextcloud
+    restart: unless-stopped
+    env_file:
+      - ./minio/secret.env
     volumes:
       - nextcloud:/var/www/html
     networks:
       - proxy-tiers
       - db-tiers
+      - b2-gateway-tiers
     depends_on:
       - db
       - proxy
+      - b2-gateway
 
   proxy:
     image: abiosoft/caddy:php-no-stats
@@ -52,3 +65,4 @@ volumes:
 networks:
   proxy-tiers:
   db-tiers:
+  b2-gateway-tiers:
