@@ -4,6 +4,8 @@ services:
   db:
     image: postgres:alpine
     restart: unless-stopped
+    env_file:
+      - ./db/secret.env
     volumes:
       - db:/var/lib/postgresql/data
     networks:
